@@ -1,0 +1,17 @@
+CC = g++
+CFLAGS = -Wall
+SADDRESS = -fsanitize=address
+SUNDEF = -fsanitize=undefined
+GOOGLETEST ?= /root/github-classroom/University-of-Utah-CS3505/googletest
+
+TrieTests: Trie.o TrieTests.o Node.o
+	$(CC) $(SUNDEF) $(SADDRESS) -o TrieTests -std=c++11 Trie.o Node.o TrieTests.o -L$(GOOGLETEST)/lib -lgtest -lgtest_main -lpthread
+.cpp.o:
+	$(CC) $(SUNDEF) $(SADDRESS) -std=c++11 $< -c -I$(GOOGLETEST)/googletest/include
+Node.o: Node.cpp Node.h
+	$(CC) $(CFLAGS) $(SUNDEF) $(SADDRESS) -c Node.cpp
+
+test : TrieTests
+	./TrieTests
+clean:
+	rm –f TrieTests *.o
